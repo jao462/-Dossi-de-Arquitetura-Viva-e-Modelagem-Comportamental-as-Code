@@ -1,0 +1,48 @@
+flowchart TB
+    subgraph E["RAIA 1 - ESTUDANTE"]
+        A([Inicio])
+        B[Realizar cadastro de competencias]
+        C[Solicitar conciliacao]
+        D[Visualizar resultados]
+        E1[Selecionar vaga compativel]
+        F[Confirmar dados do contrato]
+        Z([Fim])
+    end
+
+    subgraph S["RAIA 2 - SISTEMA"]
+        G[Receber solicitacao]
+        H[Validar dados]
+        I{Dados validos?}
+        FK["FORK - Divisao"]
+        P1[Comparar competencias]
+        P2[Verificar requisitos das vagas]
+        JN["JOIN - Sincronizacao"]
+        K[Calcular compatibilidade]
+        L{Match suficiente?}
+        M[Apresentar vagas]
+        N[Informar ausencia de vagas]
+        O[Gerar contrato]
+        P[Salvar contrato]
+        Q[Atualizar status]
+    end
+
+    subgraph X["RAIA 3 - SERVICO EXTERNO"]
+        R[Receber contrato]
+        T[Enviar para assinatura]
+        U[Receber confirmacao]
+        V[Notificar participantes]
+    end
+
+    A --> B --> C --> G --> H --> I
+    I -->|Sim| FK
+    I -->|Nao| N
+    FK --> P1
+    FK --> P2
+    P1 --> JN
+    P2 --> JN
+    JN --> K --> L
+    L -->|Sim| M
+    L -->|Nao| N
+    M --> D --> E1 --> F --> O
+    O --> P --> Q --> R --> T --> U --> V --> Z
+    N --> Z
